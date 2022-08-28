@@ -91,6 +91,10 @@ class GreenHouse(db.Model):
     @classmethod
     def get_all_forSale(cls):
         return cls.query.filter_by(bookedForSale=True).all()
+    
+    @classmethod
+    def get_by_user_id(cls,user_id):#i added this
+        return cls.query.filter_by(user_id=user_id).all()
 
     @classmethod
     def get_by_id(cls, greenHouse_id):

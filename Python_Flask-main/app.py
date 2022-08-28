@@ -32,6 +32,8 @@ app = create_app()
 
 @app.route('/',methods=['POST','GET'])
 def index():
+    import resources
+    
     return render_template('index.html')
 
 
@@ -61,7 +63,7 @@ def contacts():
 @app.route('/home',methods=['POST','GET'])
 def home():
     if 'username' in session:
-        return render_template('home.html')
+        return render_template('home.html', msg = "Your are loggend in with email: " + session['username'] )
     else:
         return render_template('login.html',msg="Please Login First")
 
