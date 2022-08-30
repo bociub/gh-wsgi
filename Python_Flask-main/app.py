@@ -11,6 +11,7 @@ import requests
 from extensions import db, jwt
 from flask_migrate import Migrate
 from config import Config
+from resources import getplot
 
 
 from utils import check_password
@@ -30,62 +31,18 @@ def register_extensions(app):
 
 app = create_app()
 
-@app.route('/',methods=['POST','GET'])
-def index():
-    import resources
-    
-    return render_template('index.html')
-
-
-
-@app.route('/about',methods=['POST','GET'])
-def about():
-    return render_template('about.html')
-"""
-
-@app.route('/products',methods=['POST','GET'])
-def products():
-    conn = makeConnection()
-    cur = conn.cursor()
-    sql = "SELECT * FROM products ORDER BY product_id ASC"
-    cur.execute(sql)
-    if(cur.rowcount >= 1):
-        return render_template("products.html",result = cur.fetchall())
-    else:
-        return render_template('products.html',result = "No Products Found")
-
-"""
-
-@app.route('/contacts',methods=['POST','GET'])
-def contacts():
-    return render_template('contacts.html')
 
 @app.route('/home',methods=['POST','GET'])
 def home():
     if 'username' in session:
-        return render_template('home.html', msg = "Your are loggend in with email: " + session['username'] )
+        getplot("ducky@ducky.com")
+        return render_template('home.html', msg = "Your are loggend in with email: " + session['username'], plot = "static/img/plot.png"  )
+
+
+
     else:
         return render_template('login.html',msg="Please Login First")
 
-"""
-@app.route('/add-products',methods=['POST','GET'])
-def addProducts():
-    if request.method == "POST":
-        title = str(request.form['title'])
-        price = str(request.form['price'])
-        description = str(request.form['description'])
-        if title == "" or price == "" or description == "":
-            return render_template("home.html",msg="Ensure no field is empty")
-        else:
-            conn = makeConnection()
-            cur = conn.cursor()
-            sql = "INSERT INTO products(title,price,description)VALUES(%s,%s,%s)"
-            cur.execute(sql,(title,price,description))
-            conn.commit()
-            return render_template("home.html",msg="Products Added Successfully")
-    else:
-        return redirect('/home')
-"""
 
 @app.route('/register',methods=['POST','GET'])
 def register():
@@ -96,16 +53,10 @@ def register():
 @app.route('/add-users-to-db',methods=['POST','GET'])
 def addUsers():
     if request.method == "POST":
-        
-        #we proceed with the registration
 
-        
         username = str(request.form['username'])
         email = str(request.form['email'])
         non_hash_password = str(request.form['password'])
-        
-
-        
 
         if username == "" or email == "" or non_hash_password == "":
             return render_template("register.html",msg="Ensure none of the fields are empty")
@@ -125,11 +76,8 @@ def addUsers():
                 print(signup)
                 print()
             except requests.exceptions.RequestException as error:
-                print("duck94859")            
-
-
-
-    
+                print("duck94859", error)            
+   
             message = "User Has Been Added Successfully"
             return render_template("info.html",msg=message)
                 
@@ -139,9 +87,18 @@ def addUsers():
     
 
 
-@app.route('/login',methods=['POST','GET'])
+@app.route('/',methods=['POST','GET'])
 def login():
-    return render_template('login.html')
+    
+    if 'username' in session:
+        
+        return render_template('home.html', msg = "Your are loggend in with email: " + session['username'], plot = "static/img/plot.png" )
+
+        
+        
+    else:
+        return render_template('login.html',msg="Please Login First")
+
 
 @app.route('/login-user',methods=['POST','GET'])
 def loginUser():
@@ -174,4 +131,4 @@ def logout():
 
 
 if __name__ == "__main__":
-    app.run(port=5001, debug=True)
+    app.run(port=80, debug=True)

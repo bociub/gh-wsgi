@@ -18,6 +18,11 @@ class User(db.Model):
     
     
     greenHouseS = db.relationship('GreenHouse', backref='user') #where tavles connected
+    
+    def data(self):# only for getplot()
+        return {
+            'user_id': self.user_id
+            }
 
     @classmethod
     def get_by_username(cls, username):

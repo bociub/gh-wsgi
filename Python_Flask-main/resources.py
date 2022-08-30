@@ -4,55 +4,79 @@ import numpy as np
 from models.greenHouse import GreenHouse
 from models.user import User
 import json
+def getplot(user): #needs the email address not the user.
+    
+    
+    
+    
+    
+    getbyemail = User.get_by_email(user)    
+    
+    user_id = getbyemail.data()["user_id"]
+    
+    
+    
+    
+    
+    
 
-getdata = GreenHouse.get_by_user_id(1)
+    
+    getdata = GreenHouse.get_by_user_id(user_id)
+        
+    labels = []
+    OutsideTemp = []
+    InsideTemp  = []
+    WaterTemp = []
+    dayscount = 0
+    dayslist = []
+    
+    for hour in getdata: #get the needed data lists only. dont fight to miracle
+        currenthour = hour.data()
+        labels.append(currenthour["recordDateTime"])
+        OutsideTemp.append(currenthour["OutsideTemp"])
+        InsideTemp.append(currenthour["InsideTemp"])
+        WaterTemp.append(currenthour["WaterTemp"])
+        dayslist.append(dayscount)
+        dayscount += 1
+    
+    
+    plt.plot(dayslist, OutsideTemp, color='r', label='Outside temperature')
+    plt.plot(dayslist, InsideTemp, color='g', label='Inside temperature')
+    plt.plot(dayslist, WaterTemp, color='b', label='Water temperature')
+    plt.xlabel("hours")
+    plt.ylabel("temperature")
+    plt.title("Temperature data")
+    plt.legend()
+    plt.savefig("static/img/plot.png")
+    plt.close()
+    
+    
 """
-tow = duck[0]
-toto = tow.data() #THIS IS AN HUOR's DICTIONARY'
-tutu = json.dumps(toto)
+30/8 way more better if days are presented not hours. 3 data per day per recorded temperature data. the min, the max, and the avarage
+
+"""    
+ 
+"""    
+test = {} 
+x=0  
+for time in labels:
+    test[time] = [OutsideTemp[x],InsideTemp[x],WaterTemp[x]]
+    
+    x += 1
+test = json.dumps(test)       
 f = open("duckyquack.txt", "w")
-f.write(tutu)
-f.close()
+f.write(test)  
+f.close()  
 """
-thedata = {}
-for hour in getdata: 
-    currenthour = hour.data()
-    currenttime = currenthour["recordDateTime"]
-    currenttime = currenttime.split(',')
-    thehour = int(currenttime[1])
-    theday = int(currenttime[0])
     
     
-    
-    #thedata[theday][thehour] = currenthour.copy()  
-    f = open("duckyquack.txt", "a")
-    f.write(str(thehour) + "-" + str(theday) + "#")
-    f.close()
-    
-    
-    
-    
-
-
-  
-x = np.array([1, 2, 3, 4]) #x axis b
-y = x*2 #y axxis
-
-# first plot with X and Y data
-plt.plot(x, y) #draw the empty chart
-
-
-
-  
-x1 = [2, 4, 6, 34]
-y1 = [3, 5, 7, 4]
-  
-# second plot with x1 and y1 data
-plt.plot(x1, y1)
-  
-plt.xlabel("X-axis data")
-plt.ylabel("Y-axis data")
-plt.title('multiple plots')
-
-
-plt.show()
+"""it works   
+x = [1, 2, 3, 4, 5]
+y = [4, 6, 3, 7, 2]
+plt.plot(x, y)
+plt.xlabel("x values")
+plt.ylabel("y values")
+plt.title("Matplotlib - Save plot but dont show")
+plt.savefig("filename.png")
+plt.close()
+"""

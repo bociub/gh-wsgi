@@ -1,27 +1,19 @@
 {% include "header.html" %}
 
-<div class="jumbotron">
-    <div class="container">
-        <h1>This page is only for logged in users</h1>
-        <h5><a href="/logout">Logout</a></h5>
-    </div>
-</div>
+
 
 <div class="container">
-    <h3>Admin Dashboard</h3>
+    <h3>Greenhouse Dashboard</h3>
 
     <div class="card">
         <div class="card-header">
-            <h5>Fill in the form below</h5>
+            <h5>Status:</h5>
             <h5 class="text-success">{{ msg }} </h5>
+            <br>
+            <img src={{plot}}>
         </div>
         <div class="card-body">
-            <form action="/add-products" method="POST">
-                <input type="text" name="title" placeholder="Name of the product"><br><br>
-                <input type="number" name="price" placeholder="Price"><br><br>
-                <textarea name="description" id="" cols="30" rows="10"></textarea><br><br>
-                <input type="submit" value="Save Product"><br><br>
-            </form>
+
         </div>
     </div>
 
